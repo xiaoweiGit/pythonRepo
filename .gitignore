@@ -1,2 +1,6 @@
 sv_dandan/simple/venv/
 sv_dandan/simple/__pycache__/
+sv_dandan/core/__pycache__/
+sv_dandan/core/conf/__pycache__/
+sv_dandan/core/test/__pycache__/
+
