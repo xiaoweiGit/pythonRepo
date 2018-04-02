@@ -20,11 +20,11 @@ def merge(defaults,override):
     return r
 
 configs=config_default.configs
+apiUrl=f"/{configs['SETTING']['APINAME']}/api/{configs['SETTING']['VERSION']}"
 
 try:
     import config_override
     configs=merge(configs,config_override.configs)
-    print(configs)
 except ImportError:
     pass
 

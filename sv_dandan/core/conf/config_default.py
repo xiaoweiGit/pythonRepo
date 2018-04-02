@@ -20,6 +20,12 @@ configs={
                 'SAVEPATH':f'{os.path.abspath("..")}\logs\log.txt',
                 'SLEVEL':logging.DEBUG,# print cmd  level
                 'FLEVEL':logging.DEBUG, #print file leve 
-            }
+            },
+        'SETTING':{
+                'RESPONSETYPE':'json',# supoort  onlyjson 
+                'VERSION':'v0.1',
+                'APINAME':'dandan',
+                }
         }
+
 
