@@ -2,7 +2,7 @@
 # @ Time :2018 /3/20 
 # @ File : config.py 
 #import configparser 
-import config_default
+import conf.config_default
 
 __author__ = 'bill'
 
@@ -19,7 +19,7 @@ def merge(defaults,override):
             r[k]=v
     return r
 
-configs=config_default.configs
+configs=conf.config_default.configs
 apiUrl=f"/{configs['SETTING']['APINAME']}/api/{configs['SETTING']['VERSION']}"
 
 try:
