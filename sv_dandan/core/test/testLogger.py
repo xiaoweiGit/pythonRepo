@@ -1,7 +1,7 @@
 import unittest
 import os,sys,logging
 sys.path.append(os.path.abspath('..'))
-import logger
+from logger import Logger
 
 class TestLogger(unittest.TestCase):
     def setUp(self):

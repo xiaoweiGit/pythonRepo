@@ -12,7 +12,7 @@ class Logger:
         if value:
             path=value
         if os.path.exists(path):
-            with open(path,"r") as f:
+            with open(path, "r") as f:
                 config=yaml.load(f)
                 # print(f"------{config}------")
                 logging.config.dictConfig(config)
@@ -21,7 +21,7 @@ class Logger:
     
     @staticmethod
     def getlogger():
-        logger=Logger()
+        logger = Logger()
         logger.setup_logging()
         return logging
 

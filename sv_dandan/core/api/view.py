@@ -22,7 +22,6 @@ tasks = [
 ]
 
 
-
 @api.route(f'{config.apiUrl}/',methods=['GET'])
 def d_get_tasks():
     return jsonify(tasks)
