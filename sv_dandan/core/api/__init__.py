@@ -1,7 +1,7 @@
-#codeing:utf-8
+# codeing:utf-8
 from flask import Blueprint
 
-api=Blueprint('api',__name__,)
+api = Blueprint('api', __name__, )
 
-from api import user
-from api import view
+from core.api import user
+from core.api import view

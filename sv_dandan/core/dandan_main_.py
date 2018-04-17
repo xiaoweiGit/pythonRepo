@@ -1,22 +1,15 @@
-import os
-import sys
-from flask import Flask,jsonify,request,Blueprint
-
-from conf.config import *
-# sys.path.append(f"{os.path.abspath('.')}\conf")
-# sys.path.append(f"{os.path.abspath('.')}\log") import config
-from logger import Logger
-import time
+from flask import Flask, jsonify, request, Blueprint
 
 __author__ = 'bill'
 
-app=Flask(__name__)
+app = Flask(__name__)
 # log
-logger = Logger.getlogger()
+# logger = Logger.getlogger()
 
 # blueprint
 from api import api
-app.register_blueprint(api) 
 
-if __name__=="__main__":
-     app.run(host='0.0.0.0', debug=True, threaded=True)
+app.register_blueprint(api)
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=True, threaded=True)

@@ -1,5 +1,5 @@
 # _*_ coding:utf-8 _*_
-from jsonModel import jsonModel
+from  core.jsonModel import jsonModel
 @jsonModel()
 class User:
     def __init__(self):
@@ -20,4 +20,4 @@ class User:
         self.Interest=[]
         self.answer=[]
         self.media=[]
-        self.Friend_show=[]
+        self.friend_show=[]

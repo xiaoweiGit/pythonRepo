@@ -19,9 +19,5 @@ class Logger:
         else:
             logging.basicConfig(level=default_level)
     
-    @staticmethod
-    def getlogger():
-        logger = Logger()
-        logger.setup_logging()
-        return logging
+
 
