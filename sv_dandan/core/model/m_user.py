@@ -1,7 +1,10 @@
 # _*_ coding:utf-8 _*_
-from  core.jsonModel import jsonModel
+from core.lib.jsonModel import jsonModel
 @jsonModel()
 class User:
+
+    __name__="User"
+
     def __init__(self):
         self.user_id = ""
         self.password = ""

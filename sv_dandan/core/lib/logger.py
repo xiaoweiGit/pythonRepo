@@ -6,7 +6,7 @@ __author__='bill'
 
 class Logger:
     
-    def setup_logging(self,default_path="logging.yaml",default_level=logging.INFO,env_key="LOG_CFG"):
+    def setup_logging(self,default_path="lib\logging.yaml",default_level=logging.INFO,env_key="LOG_CFG"):
         path=default_path
         value=os.getenv(env_key,None)
         if value:
@@ -14,7 +14,7 @@ class Logger:
         if os.path.exists(path):
             with open(path, "r") as f:
                 config=yaml.load(f)
-                # print(f"------{config}------")
+                print(f"------{config}------")
                 logging.config.dictConfig(config)
         else:
             logging.basicConfig(level=default_level)

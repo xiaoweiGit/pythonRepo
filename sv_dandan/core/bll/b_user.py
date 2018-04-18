@@ -1,5 +1,5 @@
-import os, sys,uuid
-from core.bll import bll
+import os, sys, uuid
+from core.bll import bll, enum
 from core.model.m_user import User
 
 sys.path.append("os.path.abspath('.')\model")
@@ -13,8 +13,15 @@ def addUser(user):
     :param user:
     :return:
     """
-#     search
-    pass
+    #     search
+    u = bll.redis.r.hget(user.__name__, user.user_id)
+    if u is None:
+        bll.redis.r.hset(user.__class__.__name__, user.user_id, user.__dict__)
+        bll.logger.DEBUG(f"redis Hset set Name:{user.__class__.__name__},key:{user.user_id},value:{user.__dict__} ")
+    else:
+        return enum.APIErrorCode.AlreadyExist, enum.APIErrorCodeDescription.AlreadyExist
+
+    return enum.APIErrorCode.Success, enum.APIErrorCodeDescription.Success
 
 
 def delUser(id):
@@ -24,6 +31,7 @@ def delUser(id):
     :return:
     """
     pass
+
 
 def updateUser(user):
     """

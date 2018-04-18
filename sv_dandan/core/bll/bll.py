@@ -1,7 +1,5 @@
-from core.logger import Logger
-from core.c_redis import CRedis
-from core.conf import *
-
+from core.lib.logger import Logger
+from core.lib.c_redis import CRedis
 from core.model import *
 import logging
 

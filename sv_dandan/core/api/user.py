@@ -1,20 +1,17 @@
 # coding:utf-8
 # @ Time :2018 /4/4
-# @ File : api/user.py 
-import os
-import sys
+# @ File : api/user.py
 
 from api import api
 from flask import request, json
 
-from core.bll import bll, b_user
+from core.bll import bll, b_user,enum
 # from core.logger import Logge
 from core.conf import config
-
+from core.model.m_response import response
 # sys.path.append(f"{os.path.abspath('.')}\model")
 # from m_user import User
 from core.model.m_user import User
-from core.model.m_response import response
 
 tasks = [
     {
@@ -32,6 +29,8 @@ def d_register():
         if not u.password.strip():
             return json.dumps(response().__dict__,ensure_ascii=False)
         # TODO:database opreation
-        b_user.addUser(u)
-
-    return json.dumps(response(1,"接口调用成功！".__dict__,ensure_ascii=Flase))
+        result=b_user.addUser(u)
+    return json.dumps(
+        response(result[0].value,
+                 result[1].value
+                 ).__dict__,ensure_ascii=False)
