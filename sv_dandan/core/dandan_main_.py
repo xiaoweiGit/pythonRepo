@@ -7,7 +7,7 @@ app = Flask(__name__)
 # logger = Logger.getlogger()
 
 # blueprint
-from api import api
+from core.api import api
 
 app.register_blueprint(api)
 
