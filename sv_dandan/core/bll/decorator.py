@@ -1,6 +1,9 @@
-from flask import jsonify,request
+from flask import jsonify, request
+from core.lib import authCheck
+from core.bll import enum, bll
 
-def Auth(**kw):
+
+def Auth_checkIsNull(*kw):
     """
 
     :param cls:
@@ -8,19 +11,27 @@ def Auth(**kw):
     """
 
     def decorater(func):
-        def checkAuth():
-            pass
-
         def checkValidity(*args, **kwargs):
-            print("------- %s" % args)
-            print("------ %s " % kw)
-            for key in kw:
-                print(f"key:{key},value:{kw[key]}")
-
-            # return func(*args, **kwargs)
+            waitCheck = None
+            result = False
+            if args.__len__() > 0 and args[0].__dict__ is not None:
+                waitCheck = args[0]
+            if kw.__len__() > 0 and waitCheck is not None:
+                for key in kw:
+                    print("_____ %s " % key)
+                    if key in waitCheck.__dict__:
+                        # check is null
+                        result = authCheck.checkStringIsNull(waitCheck.__dict__[key])
+                        if result is True:
+                            break
+                        print("--------- %s" % waitCheck.__dict__[key])
+            if  result:
+                return enum.APIErrorCode.AuthParasError, enum.APIErrorCodeDescription.AuthParasError
+            else:
+                return func(*args, **kwargs)
         return checkValidity
-
     return decorater
+
 
 
 def login_required(func):
@@ -33,6 +44,46 @@ def login_required(func):
             # g.session_id_rpc = unpack_token(token)
             # g.token = token
             return func(*args, **kwargs)
-        except :
+        except:
             return jsonify({'code': -31993, 'data': {}, 'msg': '头部token认证失败'})
+
     return wrapper
+
+
+import functools
+
+
+def ExpHandler(*pargs):
+    """ An exception handling idiom using decorators"""
+
+    def wrapper(f):
+        if pargs:
+            (handler, li) = pargs
+            print(pargs)
+            t = [(ex, handler) for ex in li]
+            t.reverse()
+        else:
+            t = [(Exception, None)]
+
+        def newfunc(t, *args, **kwargs):
+            ex, handler = t[0]
+
+            try:
+                if len(t) == 1:
+                    f(*args, **kwargs)
+                else:
+                    newfunc(t[1:], *args, **kwargs)
+            except Exception as e:
+                if handler:
+                    handler(e)
+                else:
+                    print(e.__class__.__name__, ':', e)
+
+        return functools.partial(newfunc, t)
+
+    return wrapper
+
+
+def myhandler(e):
+    bll.logger.ERROR(e)
+    return enum.APIErrorCode.Unknown_Error, enum.APIErrorCodeDescription.Unknown_Error

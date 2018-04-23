@@ -8,6 +8,8 @@ class APIErrorCode(Enum):
     AlreadyExist = -2
     InvalidUid=-3
 
+    AuthParasError=-10000
+
 
 @unique
 class APIErrorCodeDescription(Enum):
@@ -15,6 +17,8 @@ class APIErrorCodeDescription(Enum):
     Unknown_Error = "Unknown Error"
     AlreadyExist = "Specified object already exists"
     InvalidUid="Invalid user id"
+    AuthParasError="Missing Parameters"
+
 
 
 @unique

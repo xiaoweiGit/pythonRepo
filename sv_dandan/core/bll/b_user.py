@@ -1,12 +1,14 @@
 import os, sys, uuid
 from core.bll import bll, enum, decorator
 from core.model.m_user import User
+import json
 
 sys.path.append("os.path.abspath('.')\model")
 from core.model.m_user import User
 
 
-# @decorator.Auth(check=['user_id', 'phone'])
+# @decorator.ExpHandler(decorator.myhandler, ())
+@decorator.Auth_checkIsNull("password")
 def addUser(user):
     """
     @ register a user
@@ -15,15 +17,15 @@ def addUser(user):
     :return:
     """
     #     search
-    u = bll.redis.r.hget(user.__name__, user.user_id)
-    if u is None:
-        user.user_id = uuid.uuid1()  # add uuid
-        bll.redis.r.hset(user.__class__.__name__, user.user_id, user.__dict__)
-        bll.logger.DEBUG(f"redis Hset set Name:{user.__class__.__name__},key:{user.user_id},value:{user.__dict__} ")
-    else:
-        return enum.APIErrorCode.AlreadyExist, enum.APIErrorCodeDescription.AlreadyExist
+    # u = bll.redis.r.hget(user.__name__, user.user_id)
+    # if u is None:
+    user.user_id = str(uuid.uuid1())  # add uuid
+    bll.redis.r.hset(user.__class__.__name__, user.user_id, user.__dict__)
+    bll.logger.info(f"redis Hset set Name:{user.__class__.__name__},value:{user.__dict__} ")
+    # else:
+    #     return enum.APIErrorCode.AlreadyExist, enum.APIErrorCodeDescription.AlreadyExist
 
-    return enum.APIErrorCode.Success, enum.APIErrorCodeDescription.Success
+    return f"user_id:{user.user_id}", enum.APIErrorCode.Success, enum.APIErrorCodeDescription.Success
 
 
 def delUser(id):
@@ -34,17 +36,26 @@ def delUser(id):
     """
     pass
 
-
+@decorator.Auth_checkIsNull("user_id","password","acount")
 def updateUser(user):
     """
     update
     :param user:
     :return:
     """
-    pass
+    # search
+    u = bll.redis.r.hget(user.__name__, user.user_id)
+    if u is None:
+        return [], enum.APIErrorCode.InvalidUid, enum.APIErrorCodeDescription.InvalidUid
+    else:
+        bll.redis.r.hset(user.__class__.__name__, user.user_id, user.__dict__)
+        bll.logger.info(f"redis Hset set Name:{user.__class__.__name__},value:{user.__dict__} ")
+
+    return f"user_id:{user.user_id}", enum.APIErrorCode.Success, enum.APIErrorCodeDescription.Success
 
 
-def getUser(user,isProcess=True,msg=""):
+@decorator.Auth_checkIsNull("user_id")
+def getUser(user):
     """
     get
     :param msg:
@@ -52,12 +63,9 @@ def getUser(user,isProcess=True,msg=""):
     :param user:
     :return:
     """
-    if isProcess:
-        u= bll.redis.r.hget(user.__class__.__name__,user.user_id)
-        print(user.__class__,__name__)
-        bll.logger.info("hello")
-        if u is None:
-            return [],enum.APIErrorCode.InvalidUid,enum.APIErrorCodeDescription.InvalidUid
-        return eval(u),enum.APIErrorCode.Success,enum.API
-    else:
-        return [],enum.APIErrorCode.InvalidUid,enum.APIErrorCodeDescription.InvalidUid
+    u = bll.redis.r.hget(user.__class__.__name__, user.user_id)
+    print(user.__class__, __name__)
+    bll.logger.info("hello")
+    if u is None:
+        return [], enum.APIErrorCode.InvalidUid, enum.APIErrorCodeDescription.InvalidUid
+    return eval(u), enum.APIErrorCode.Success, enum.APIErrorCodeDescription.Success

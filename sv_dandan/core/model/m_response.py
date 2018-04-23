@@ -1,4 +1,4 @@
-class response(object):
+class responseData(object):
 
     def __init__(self, code=-1, msg=u'接口调用失败！', data=[]):
         """
@@ -8,3 +8,13 @@ class response(object):
         self.code = code
         self.msg = msg
         self.data = data
+
+class response(object):
+    
+    def __init__(self,code=-1,msg=u'接口调用失败！'):
+        """
+
+        :type code: object
+        """
+        self.code=code
+        self.msg=msg
