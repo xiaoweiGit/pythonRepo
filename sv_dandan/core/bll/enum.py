@@ -10,6 +10,8 @@ class APIErrorCode(Enum):
 
     AuthParasError=-10000
 
+    DBConfigError=-200001
+
 
 @unique
 class APIErrorCodeDescription(Enum):
@@ -19,6 +21,7 @@ class APIErrorCodeDescription(Enum):
     InvalidUid="Invalid user id"
     AuthParasError="Missing Parameters"
 
+    DBConfigError="Database Config Error"
 
 
 @unique

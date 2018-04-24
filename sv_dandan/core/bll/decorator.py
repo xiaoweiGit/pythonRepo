@@ -1,3 +1,5 @@
+import traceback
+
 from flask import jsonify, request
 from core.lib import authCheck
 from core.bll import enum, bll
@@ -25,13 +27,14 @@ def Auth_checkIsNull(*kw):
                         if result is True:
                             break
                         print("--------- %s" % waitCheck.__dict__[key])
-            if  result:
+            if result:
                 return enum.APIErrorCode.AuthParasError, enum.APIErrorCodeDescription.AuthParasError
             else:
                 return func(*args, **kwargs)
-        return checkValidity
-    return decorater
 
+        return checkValidity
+
+    return decorater
 
 
 def login_required(func):
@@ -50,40 +53,16 @@ def login_required(func):
     return wrapper
 
 
-import functools
-
-
-def ExpHandler(*pargs):
-    """ An exception handling idiom using decorators"""
-
-    def wrapper(f):
-        if pargs:
-            (handler, li) = pargs
-            print(pargs)
-            t = [(ex, handler) for ex in li]
-            t.reverse()
-        else:
-            t = [(Exception, None)]
-
-        def newfunc(t, *args, **kwargs):
-            ex, handler = t[0]
-
+def try_except(errors: object = (Exception,),
+               default_value: object = [enum.APIErrorCode.Unknown_Error, enum.APIErrorCodeDescription.Unknown_Error]) -> object:
+    def decorator(func):
+        def new_func(*args, **kwargs):
             try:
-                if len(t) == 1:
-                    f(*args, **kwargs)
-                else:
-                    newfunc(t[1:], *args, **kwargs)
-            except Exception as e:
-                if handler:
-                    handler(e)
-                else:
-                    print(e.__class__.__name__, ':', e)
+                return func(*args, **kwargs)
+            except errors as e:
+                bll.logger.error(traceback.format_exc())
+                return default_value
 
-        return functools.partial(newfunc, t)
+        return new_func
 
-    return wrapper
-
-
-def myhandler(e):
-    bll.logger.ERROR(e)
-    return enum.APIErrorCode.Unknown_Error, enum.APIErrorCodeDescription.Unknown_Error
+    return decorator

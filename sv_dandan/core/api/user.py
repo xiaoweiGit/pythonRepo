@@ -5,10 +5,10 @@
 from core.api import api
 from flask import request, json, jsonify
 
-from core.bll import bll, b_user, enum
+from core.bll import bll, b_user, enum, decorator
 # from core.logger import Logge
 from core.conf import config
-from core.model.m_response import response,responseData
+from core.model.m_response import response, responseData
 # sys.path.append(f"{os.path.abspath('.')}\model")
 # from m_user import User
 from core.model.m_user import User
@@ -35,7 +35,7 @@ def d_get_tasks():
 @api.route(f'{config.apiUrl}/user/account', methods=['POST'])
 def d_register():
     if request.method == 'POST':
-        u = bll.fromJsonToModel(User.__name__, request)
+        u = bll.fromJsonToModel(User.__name__, request.get_json())
         if not u.password.strip():
             return json.dumps(response().__dict__, ensure_ascii=False)
         # TODO:database opreation
@@ -50,6 +50,8 @@ def d_register():
 
 
 @api.route(f'{config.apiUrl}/user/<string:uid>', methods=['GET'])
+@decorator.try_except(default_value=json.dumps(
+    responseData([], enum.APIErrorCode.Unknown_Error.value, enum.APIErrorCodeDescription.Unknown_Error.value).__dict__,ensure_ascii=False))
 def d_getUserInfo(uid):
     u = User()
     u.user_id = uid

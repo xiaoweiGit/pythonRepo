@@ -1,5 +1,9 @@
 from core.lib.logger import Logger
 from core.lib.c_redis import CRedis
+from core.bll import decorator
+from core.model.m_response import response
+from core.bll.enum import APIErrorCodeDescription, APIErrorCode
+import json
 from core.model import *
 import logging
 
@@ -25,7 +29,7 @@ def __getlogger__() -> object:
     return logging
 
 
-def fromJsonToModel(o, re):
+def fromJsonToModel(o, jn):
     """
      get request json to model
     :param o: __name
@@ -33,10 +37,10 @@ def fromJsonToModel(o, re):
     :return: model
     """
     u = globals()[o]()
-    u.fromJson(re.get_json());
+    u.fromJson(jn);
     logger.info(u.__dict__)
     return u
 
 
-redis = __getcRedis__()
 logger = __getlogger__()
+redis = __getcRedis__()
