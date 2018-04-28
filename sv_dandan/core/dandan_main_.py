@@ -1,5 +1,7 @@
+import sys,os
 from flask import Flask, jsonify, request, Blueprint
 
+sys.path.append(os.path.abspath(".."))
 __author__ = 'bill'
 
 app = Flask(__name__)
